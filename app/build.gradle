@@ -4,6 +4,7 @@ android {
     compileSdk 30
 
     defaultConfig {
+		namespace 'com.winlator'
         applicationId 'com.winlator'
         minSdkVersion 26
         targetSdkVersion 28
