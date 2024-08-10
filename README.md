@@ -2,6 +2,14 @@
 	<img src="logo.png" width="376" height="128" alt="Winlator Logo" />  
 </p>
 
+# About Fork
+
+This fork is based on latest changes in main source by brunodev85/winlator with some extras from other commits and forks (and minor additions by me):
+- Fixes for builds on Windows using Android Studio (Changes based on commit 2ed565f5016e0ebdef80f8a91e24d08dcb25007a by kazimaruf991)
+- Direct touch mouse control (Pull request merge from commit 1436e1aad5b7ae3fa6044e34bc3cb968a4f5df03 by Hydr8gon)
+- Some direct touch input presets to use with touch/mouse focused games
+- "beta" branch also has assets (like wine 9.2 and updates to components) from fork: MrPhryaNikFrosty/Winlator-Frost
+
 # Winlator
 
 Winlator is an Android application that lets you to run Windows (x86_64) applications with Wine and Box86/Box64.
