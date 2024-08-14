@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,6 +34,8 @@ import com.winlator.box86_64.Box86_64PresetManager;
 import com.winlator.container.Container;
 import com.winlator.container.ContainerManager;
 import com.winlator.contentdialog.ContentDialog;
+import com.winlator.contents.ContentProfile;
+import com.winlator.contents.ContentsManager;
 import com.winlator.core.AppUtils;
 import com.winlator.core.ArrayUtils;
 import com.winlator.core.Callback;
@@ -41,6 +45,7 @@ import com.winlator.core.PreloaderDialog;
 import com.winlator.core.StringUtils;
 import com.winlator.core.WineInfo;
 import com.winlator.core.WineUtils;
+import com.winlator.inputcontrols.ExternalController;
 import com.winlator.xenvironment.ImageFs;
 
 import org.json.JSONArray;
@@ -99,6 +104,11 @@ public class SettingsFragment extends Fragment {
 
         final Spinner sBox64Version = view.findViewById(R.id.SBox64Version);
         String box64Version = preferences.getString("box64_version", DefaultVersion.BOX64);
+
+        ContentsManager contentsManager = new ContentsManager(context);
+        contentsManager.syncContents();
+        loadBox64VersionSpinner(context, contentsManager, sBox64Version);
+
         if (!AppUtils.setSpinnerSelectionFromIdentifier(sBox64Version, box64Version)) {
             AppUtils.setSpinnerSelectionFromIdentifier(sBox64Version, DefaultVersion.BOX64);
         }
@@ -135,6 +145,22 @@ public class SettingsFragment extends Fragment {
         });
         sbCursorSpeed.setProgress((int)(preferences.getFloat("cursor_speed", 1.0f) * 100));
 
+        final RadioGroup rgTriggerMode = view.findViewById(R.id.RGTriggerMode);
+        List<Integer> triggerRbIds = List.of(R.id.RBTriggerAsButton, R.id.RBTriggerAsAxis, R.id.RBTriggerAsBoth);
+        int triggerMode = preferences.getInt("trigger_mode", ExternalController.TRIGGER_AS_AXIS);
+
+        if (triggerMode >= 0 && triggerMode < triggerRbIds.size()) {
+            ((RadioButton) (rgTriggerMode.findViewById(triggerRbIds.get(triggerMode)))).setChecked(true);
+        }
+
+        final CheckBox cbUseGlibc = view.findViewById(R.id.CBUseGlibc);
+        cbUseGlibc.setChecked(preferences.getBoolean("use_glibc", true));
+        cbUseGlibc.setEnabled(false);
+
+        final CheckBox cbEnableFileProvider = view.findViewById(R.id.CBEnableFileProvider);
+        cbEnableFileProvider.setChecked(preferences.getBoolean("enable_file_provider", false));
+        cbEnableFileProvider.setOnClickListener(v -> AppUtils.showToast(context, R.string.take_effect_next_startup));
+
         loadInstalledWineList(view);
 
         view.findViewById(R.id.BTSelectWineFile).setOnClickListener((v) -> {
@@ -151,6 +177,9 @@ public class SettingsFragment extends Fragment {
             editor.putFloat("cursor_speed", sbCursorSpeed.getProgress() / 100.0f);
             editor.putBoolean("enable_wine_debug", cbEnableWineDebug.isChecked());
             editor.putBoolean("enable_box86_64_logs", cbEnableBox86_64Logs.isChecked());
+            editor.putInt("trigger_mode", triggerRbIds.indexOf(rgTriggerMode.getCheckedRadioButtonId()));
+            editor.putBoolean("use_glibc", cbUseGlibc.isChecked());
+            editor.putBoolean("enable_file_provider", cbEnableFileProvider.isChecked());
 
             if (!wineDebugChannels.isEmpty()) {
                 editor.putString("wine_debug_channels", String.join(",", wineDebugChannels));
@@ -404,5 +433,16 @@ public class SettingsFragment extends Fragment {
         editor.remove("current_box86_version");
         editor.remove("current_box64_version");
         editor.apply();
+    }
+
+    public static void loadBox64VersionSpinner(Context context, ContentsManager manager, Spinner spinner) {
+        String[] originalItems = context.getResources().getStringArray(R.array.box64_version_entries);
+        List<String> itemList = new ArrayList<>(Arrays.asList(originalItems));
+        for (ContentProfile profile : manager.getProfiles(ContentProfile.ContentType.CONTENT_TYPE_BOX64)) {
+            String entryName = ContentsManager.getEntryName(profile);
+            int firstDashIndex = entryName.indexOf('-');
+            itemList.add(entryName.substring(firstDashIndex + 1));
+        }
+        spinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, itemList));
     }
 }

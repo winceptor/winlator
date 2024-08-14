@@ -1,7 +1,10 @@
 package com.winlator.winhandler;
 
+import android.content.SharedPreferences;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+
+import androidx.preference.PreferenceManager;
 
 import com.winlator.XServerDisplayActivity;
 import com.winlator.core.StringUtils;
@@ -41,6 +44,8 @@ public class WinHandler {
     private byte dinputMapperType = DINPUT_MAPPER_TYPE_XINPUT;
     private final XServerDisplayActivity activity;
     private final List<Integer> gamepadClients = new CopyOnWriteArrayList<>();
+    private SharedPreferences preferences;
+    private byte triggerMode;
 
     public WinHandler(XServerDisplayActivity activity) {
         this.activity = activity;
@@ -164,11 +169,17 @@ public class WinHandler {
     public void bringToFront(final String processName, final long handle) {
         addAction(() -> {
             sendData.rewind();
-            sendData.put(RequestCodes.BRING_TO_FRONT);
-            byte[] bytes = processName.getBytes();
-            sendData.putInt(bytes.length);
-            sendData.put(bytes);
-            sendData.putLong(handle);
+            try {
+                sendData.put(RequestCodes.BRING_TO_FRONT);
+                byte[] bytes = processName.getBytes();
+                sendData.putInt(bytes.length);
+                // FIXME: Chinese and Japanese got from winhandler.exe are broken, and they cause overflow.
+                sendData.put(bytes);
+                sendData.putLong(handle);
+            } catch (java.nio.BufferOverflowException e) {
+                e.printStackTrace();
+                sendData.rewind();
+            }
             sendPacket(CLIENT_PORT);
         });
     }
@@ -221,6 +232,8 @@ public class WinHandler {
         switch (requestCode) {
             case RequestCodes.INIT: {
                 initReceived = true;
+                preferences = PreferenceManager.getDefaultSharedPreferences(activity.getBaseContext());
+                triggerMode = (byte) preferences.getInt("trigger_mode", ExternalController.TRIGGER_AS_AXIS);
 
                 synchronized (actions) {
                     actions.notify();
@@ -252,6 +265,8 @@ public class WinHandler {
 
                 if (!useVirtualGamepad && (currentController == null || !currentController.isConnected())) {
                     currentController = ExternalController.getController(0);
+                    if (currentController != null)
+                        currentController.setTriggerMode(triggerMode);
                 }
 
                 final boolean enabled = currentController != null || useVirtualGamepad;

@@ -32,6 +32,8 @@
                         android:layout_width="240dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:enabled="false"
+                        android:visibility="gone"
                         android:text="@string/install_wine" />
                 </LinearLayout>
 
@@ -48,12 +50,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:text="@string/box86_version" />
 
                     <Spinner
                         style="@style/ComboBox"
                         android:id="@+id/SBox86Version"
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:entries="@array/box86_version_entries" />
 
                     <TextView
@@ -70,12 +74,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:text="@string/box86_preset" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         android:gravity="center_vertical">
 
                         <Spinner
@@ -232,6 +238,75 @@
                 <TextView
                     style="@style/FieldSetLabel"
                     android:text="@string/logs" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout style="@style/FieldSet">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/trigger_mode"/>
+
+                    <RadioGroup
+                        android:id="@+id/RGTriggerMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:id="@+id/RBTriggerAsButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/as_button"/>
+
+                        <RadioButton
+                            android:id="@+id/RBTriggerAsAxis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/as_axis"/>
+
+                        <RadioButton
+                            android:id="@+id/RBTriggerAsBoth"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/both"/>
+                    </RadioGroup>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/FieldSetLabel"
+                    android:text="@string/game_controller" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout style="@style/FieldSet">
+                    <CheckBox
+                        android:id="@+id/CBUseGlibc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/use_glibc" />
+
+                    <View style="@style/FieldSeparator" />
+
+                    <CheckBox
+                        android:id="@+id/CBEnableFileProvider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enable_file_provider" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/FieldSetLabel"
+                    android:text="@string/experimental" />
             </FrameLayout>
         </LinearLayout>
     </ScrollView>

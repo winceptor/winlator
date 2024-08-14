@@ -110,7 +110,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        show(new ContainersFragment());
+        if (fragmentManager.getBackStackEntryCount() > 0)
+            fragmentManager.popBackStack();
+        else
+            show(new ContainersFragment());
     }
 
     public void setOpenFileCallback(Callback<Uri> openFileCallback) {
@@ -157,6 +160,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.main_menu_input_controls:
                 show(new InputControlsFragment(selectedProfileId));
+                break;
+            case R.id.main_menu_box_rc:
+                show(new Box86_64RCFragment());
+                break;
+            case R.id.main_menu_contents:
+                show(new ContentsFragment());
                 break;
             case R.id.main_menu_settings:
                 show(new SettingsFragment());
@@ -205,6 +214,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TextView tvCreditsAndThirdPartyApps = dialog.findViewById(R.id.TVCreditsAndThirdPartyApps);
             tvCreditsAndThirdPartyApps.setText(Html.fromHtml(creditsAndThirdPartyAppsHTML, Html.FROM_HTML_MODE_LEGACY));
             tvCreditsAndThirdPartyApps.setMovementMethod(LinkMovementMethod.getInstance());
+
+            String glibcExpVersionForkHTML = String.join("<br />",
+                    "longjunyu2's <a href=\"https://github.com/longjunyu2/winlator/tree/use-glibc-instead-of-proot\">(Fork)</a>");
+            TextView tvGlibcExpVersionFork = dialog.findViewById(R.id.TVGlibcExpVersionFork);
+            tvGlibcExpVersionFork.setText(Html.fromHtml(glibcExpVersionForkHTML, Html.FROM_HTML_MODE_LEGACY));
+            tvGlibcExpVersionFork.setMovementMethod(LinkMovementMethod.getInstance());
         }
         catch (PackageManager.NameNotFoundException e) {}
 
