@@ -338,7 +338,7 @@ public class ContainerDetailFragment extends Fragment {
             sStrictShaderMath.setSelection(Math.min(registryEditor.getDwordValue("Software\\Wine\\Direct3D", "strict_shader_math", 1), 1));
 
             Spinner sVideoMemorySize = view.findViewById(R.id.SVideoMemorySize);
-            String videoMemorySize = registryEditor.getStringValue("Software\\Wine\\Direct3D", "VideoMemorySize", "2048");
+            String videoMemorySize = registryEditor.getStringValue("Software\\Wine\\Direct3D", "VideoMemorySize", "4096");
             AppUtils.setSpinnerSelectionFromNumber(sVideoMemorySize, videoMemorySize);
 
             List<String> mouseWarpOverrideList = Arrays.asList(context.getString(R.string.disable), context.getString(R.string.enable), context.getString(R.string.force));

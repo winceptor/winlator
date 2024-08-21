@@ -30,14 +30,17 @@
     </string-array>
     <string-array name="dxwrapper_entries">
         <item>WineD3D</item>
-        <item>DXVK</item>
+        <item>DXVK (Default)</item>
         <item>VKD3D</item>
         <item>CNC DDraw</item>
     </string-array>
     <string-array name="dxvk_version_entries">
         <item>0.96</item>
-        <item>1.10.3 (Default)</item>
-        <item>2.3.1</item>
+        <item>1.10.3</item>
+        <item>2.3.1</item>        
+        <item>2.4 (Default)</item>
+        <item>2.4.1</item>
+        <item>2.4.2</item>
     </string-array>
     <string-array name="dxvk_max_device_memory_entries">
         <item>0 (Default)</item>
@@ -54,7 +57,7 @@
         <item>512 MB</item>
         <item>1024 MB</item>
         <item>2048 MB</item>
-        <item>4096 MB</item>
+        <item>4096 MB (Default)</item>
     </string-array>
     <string-array name="dxvk_framerate_entries">
         <item>0 (Default)</item>
@@ -67,12 +70,15 @@
         <item>Native (Windows)</item>
     </string-array>
     <string-array name="box86_version_entries">
-        <item>0.3.2 (Default)</item>
-        <item>0.3.7</item>
+        <item>0.3.2</item>
+        <item>0.3.7 (Default)</item>
     </string-array>
     <string-array name="box64_version_entries">
-        <item>0.2.8 (Default)</item>
+        <item>0.2.8</item>
         <item>0.2.9</item>
+        <item>0.3.0</item>
+        <item>0.3.1</item>
+        <item>0.3.2 (Default)</item>
     </string-array>
     <string-array name="dinput_mapper_type_entries">
         <item>Standard (Old Gamepads)</item>
